@@ -24,16 +24,59 @@ For this repo specifically:
 1. Pick the UI scope. Admin scenarios go under `admin/scenarios/`; a
    storefront-scope `store/` directory would house store scenarios when
    we add them.
-2. Put your scenario under `admin/scenarios/<area>/<scenario-name>/test.py`
-   following the layout of existing scenarios.
-3. Use **pixel-anchored Locators** — `bbox=(x, y, w, h)` capturing the
-   element's on-page position. Don't introduce CSS selectors,
-   `data-testid` lookups, or `aria-label` matching as a workaround.
-4. From within `admin/`, run it against the baseline first:
+2. Each scenario lives in `admin/scenarios/<area>/<scenario-name>/` and
+   **must contain both files**:
+   - `test.py` — the executable scout scenario (the runtime artifact)
+   - `spec.md` — the human-readable scenario card (the review artifact)
+3. Use **pixel-anchored Locators** in `test.py` — `bbox=(x, y, w, h)`
+   capturing the element's on-page position. Don't introduce CSS
+   selectors, `data-testid` lookups, or `aria-label` matching as a
+   workaround.
+4. Write `spec.md` so a reviewer can understand the scenario in 30
+   seconds without reading the Python (format below).
+5. From within `admin/`, run the scenario against the baseline first:
    `scout run scenarios/<your>` — make sure it produces a clean recording.
-5. Run it against the target — make sure any diff it produces is a real
+6. Run it against the target — make sure any diff it produces is a real
    regression you want surfaced, not noise. If it's noise, add the field
    or endpoint to `admin/diff_ignore.json` in the same PR.
+
+### `spec.md` format
+
+```markdown
+---
+name: <area>.<scenario-name>
+url: <starting URL path>
+tags:
+- smoke         # or: core, crud, navigation, edge-case, ...
+- crud
+priority: critical    # or: high, medium, low
+---
+
+## Preconditions
+
+- logged_in: False
+- page: /login
+
+## Steps
+
+1. Navigate to ...
+2. Enter ... in the ... field
+3. Click "..." button
+...
+
+## Assertions
+
+- **url_match**: ...
+- **<other-assertion-kind>**: ...
+```
+
+The point of `spec.md` is that scenarios are **engineering artifacts** —
+readable by humans, reviewable in PRs, and (when contributed upstream)
+parseable by maintainers of the project being tested. test.py without
+spec.md is opaque; bbox coordinates don't tell you what the test does.
+
+See [`admin/scenarios/auth/login-and-logout/spec.md`](admin/scenarios/auth/login-and-logout/spec.md)
+for a worked example.
 
 ### Why pixel-anchored locators only
 
