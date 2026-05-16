@@ -21,16 +21,19 @@ The scenario file format is documented in
 [boxprobe/scout's README](https://github.com/boxprobe/scout#quickstart).
 For this repo specifically:
 
-1. Put your scenario under `scenarios/<area>/<scenario-name>/test.py`
+1. Pick the UI scope. Admin scenarios go under `admin/scenarios/`; a
+   storefront-scope `store/` directory would house store scenarios when
+   we add them.
+2. Put your scenario under `admin/scenarios/<area>/<scenario-name>/test.py`
    following the layout of existing scenarios.
-2. Use **pixel-anchored Locators** — `bbox=(x, y, w, h)` capturing the
+3. Use **pixel-anchored Locators** — `bbox=(x, y, w, h)` capturing the
    element's on-page position. Don't introduce CSS selectors,
    `data-testid` lookups, or `aria-label` matching as a workaround.
-3. Run it against the baseline first: `scout run scenarios/<your>` — make
-   sure it produces a clean recording.
-4. Run it against the target — make sure any diff it produces is a real
+4. From within `admin/`, run it against the baseline first:
+   `scout run scenarios/<your>` — make sure it produces a clean recording.
+5. Run it against the target — make sure any diff it produces is a real
    regression you want surfaced, not noise. If it's noise, add the field
-   or endpoint to `diff_ignore.json` in the same PR.
+   or endpoint to `admin/diff_ignore.json` in the same PR.
 
 ### Why pixel-anchored locators only
 
@@ -67,7 +70,7 @@ To swap baseline / target to a different pair:
 
 ## Adding noise rules
 
-`diff_ignore.json` rule types (see [scout's docs](https://github.com/boxprobe/scout)
+`<scope>/diff_ignore.json` rule types (see [scout's docs](https://github.com/boxprobe/scout)
 for the full schema):
 
 - `field_ignore` — fields anywhere in the response body to ignore

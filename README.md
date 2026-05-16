@@ -8,11 +8,16 @@ Clone this repo, run docker compose, run scout twice, open the report.
 
 ```
 boxprobe/scout-medusa
-├── compose/         Medusa baseline (v2.13.6) + target (v2.14.0) on Docker
-├── scenarios/       15 admin scenarios (auth, customers, inventory, ...)
-├── app.json         Default URLs and viewport for the demo
-└── diff_ignore.json Suppression rules for known noise (timestamps, IDs, ...)
+├── compose/        Medusa baseline (v2.13.6) + target (v2.14.0) on Docker
+└── admin/          Admin-dashboard scope
+    ├── scenarios/         15 scenarios (auth, customers, inventory, ...)
+    ├── app.json           Default URLs and viewport
+    └── diff_ignore.json   Suppression rules for known noise
 ```
+
+Medusa has two UI surfaces — the admin dashboard (covered here) and a
+storefront. Storefront-scope scenarios would land in a sibling `store/`
+directory; they're not in the demo yet.
 
 ---
 
@@ -61,20 +66,23 @@ bash compose/start.sh
 pip install boxprobe-scout
 playwright install chromium
 
-# 4. Record baseline
+# 4. Switch into the admin scope (scout reads app.json from cwd)
+cd admin
+
+# 5. Record baseline
 scout run scenarios/ --web-version 2.13.6
 # This drives the UI through 15 scenarios via Playwright against
 # http://localhost:19000/app and records every API call made.
 
-# 5. Record target (point scout at port 29000 this time)
+# 6. Record target (point scout at port 29000 this time)
 scout run scenarios/ --web-version 2.14.0 \
                      --web-base-url http://localhost:29000/app \
                      --api-base-url http://localhost:29000
 
-# 6. List the two runs to grab their IDs
+# 7. List the two runs to grab their IDs
 scout runs
 
-# 7. Diff
+# 8. Diff
 scout diff <baseline-run-id> <target-run-id>
 ```
 
@@ -97,7 +105,7 @@ The diff command opens the HTML report in your browser.
 Both seed `admin@medusa-test.com / supersecret` as the admin user during
 first startup.
 
-### `scenarios/`
+### `admin/scenarios/`
 
 15 admin scenarios covering: auth (login, logout, redirect-when-logged-out),
 api-keys (publishable + secret), campaigns, categories, collections,
@@ -105,23 +113,24 @@ customers (including customer-groups), draft-orders, inventory (CRUD +
 search), locations, and orders (export). Each scenario is a single
 `test.py` declaring pixel-anchored Locators and an async test function.
 
-### `app.json`
+### `admin/app.json`
 
 Default web/API base URLs (baseline by default), viewport, and the demo
 admin credentials. Override with `--web-base-url` / `--api-base-url` on
 each `scout run` to point at a different target.
 
-### `diff_ignore.json`
+### `admin/diff_ignore.json`
 
-Hand-tuned noise suppression for Medusa: timestamps, IDs, tokens, plus a
-few endpoint-specific status-only rules. Without this, the diff report
-fills up with `created_at` and ULID noise that drowns out real changes.
+Hand-tuned noise suppression for Medusa's admin API: timestamps, IDs,
+tokens, plus a few endpoint-specific status-only rules. Without this, the
+diff report fills up with `created_at` and ULID noise that drowns out
+real changes.
 
 ---
 
 ## Common operations
 
-**Re-run only one scenario**:
+**Re-run only one scenario** (from the `admin/` directory):
 
 ```bash
 scout run scenarios/auth/login-and-logout --web-version 2.13.6
@@ -130,7 +139,7 @@ scout run scenarios/auth/login-and-logout --web-version 2.13.6
 **Open the latest diff report manually**:
 
 ```bash
-open .scout/diffs/*/report.html
+open admin/.scout/diffs/*/report.html
 ```
 
 **Tear it all down**:
