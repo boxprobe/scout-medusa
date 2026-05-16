@@ -1,0 +1,73 @@
+# scout-medusa demo — two pinned Medusa versions sharing one Postgres + Redis,
+# both exposing their admin dashboard on localhost ports.
+#
+# Do NOT invoke directly. Use ./start.sh which sets per-version env vars and
+# launches with -p <project-name>.
+#
+# Shared DB mode: target skips its own postgres/redis (no --profile with-db)
+# and connects to baseline's containers via the medusa-shared network.
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: medusa-pg-${TAG}
+    profiles: ["with-db"]
+    environment:
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: medusa
+      POSTGRES_DB: medusa
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - default
+      - medusa-shared
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: medusa-redis-${TAG}
+    profiles: ["with-db"]
+    volumes:
+      - redisdata:/data
+    networks:
+      - default
+      - medusa-shared
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.medusa
+      args:
+        COMMIT: ${COMMIT}
+    container_name: medusa-backend-${TAG}
+    ports:
+      - "${PORT_BACKEND}:9000"
+    environment:
+      DATABASE_URL: postgres://medusa:medusa@${DB_HOST:-postgres}:5432/medusa
+      REDIS_URL: redis://${REDIS_HOST:-redis}:6379
+      JWT_SECRET: ${JWT_SECRET:-changeme-jwt-secret}
+      COOKIE_SECRET: ${COOKIE_SECRET:-changeme-cookie-secret}
+      STORE_CORS: http://localhost:${PORT_BACKEND}
+      ADMIN_CORS: http://localhost:${PORT_BACKEND}
+      AUTH_CORS: http://localhost:${PORT_BACKEND}
+      NODE_ENV: production
+    networks:
+      - default
+      - medusa-shared
+
+networks:
+  medusa-shared:
+    external: true
+
+volumes:
+  pgdata:
+  redisdata:

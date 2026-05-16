@@ -1,0 +1,13 @@
+{
+  "name": "medusa-admin",
+  "web_base_url": "http://localhost:19000/app",
+  "api_base_url": "http://localhost:19000",
+  "viewport_width": 1920,
+  "viewport_height": 1080,
+  "direction": "ltr",
+  "wait_ms": 2000,
+  "variables": {
+    "admin_user": "admin@medusa-test.com",
+    "admin_pass": "supersecret"
+  }
+}

@@ -1,0 +1,494 @@
+{
+  "field_ignore": [
+    "updated_at",
+    "created_at",
+    "id",
+    "token",
+    "title",
+    "$.product_category.handle",
+    "$.product_category.name",
+    "$.product_categories[].name",
+    "$.product_categories[].handle",
+    "redacted",
+    "$.collection.handle",
+    "$.collections[].handle",
+    "$.stock_location.address.address_1",
+    "$.stock_location.name",
+    "$.stock_location.address.postal_code"
+  ],
+  "header_ignore": [
+    "access-control-allow-origin"
+  ],
+  "status_only": [
+    {
+      "endpoint": "GET /admin/notifications"
+    },
+    {
+      "endpoint": "GET /admin/*",
+      "step_seq": "4"
+    },
+    {
+      "endpoint": "GET /admin/orders",
+      "scenario": "orders/orders-export",
+      "step_seq": "21"
+    }
+  ],
+  "known_changes": [
+    {
+      "endpoint": "GET /admin/product-categories/*",
+      "path": "$.product_category.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "POST /admin/product-categories/*",
+      "path": "$.product_category.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "POST /admin/product-categories",
+      "path": "$.product_category.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "POST /admin/collections",
+      "path": "$.collection.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "GET /admin/collections",
+      "path": "$.collections[*].external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "GET /admin/collections/*",
+      "path": "$.collection.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "POST /admin/collections/*",
+      "path": "$.collection.external_id",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "GET /admin/orders/*/preview",
+      "path": "$.order.email",
+      "change": "added",
+      "since": "2.14.0"
+    },
+    {
+      "endpoint": "GET /admin/stock-locations/*",
+      "path": "$.stock_location.metadata",
+      "change": "added",
+      "since": "2.14.0"
+    }
+  ],
+  "endpoint_ignore": [
+    {
+      "endpoint": "GET /admin/collections",
+      "path": "$.collections[*]"
+    },
+    {
+      "endpoint": "GET /admin/collections",
+      "path": "$.count"
+    },
+    {
+      "endpoint": "GET /admin/orders",
+      "path": "$.count"
+    },
+    {
+      "endpoint": "GET /admin/customers",
+      "path": "$.count"
+    },
+    {
+      "endpoint": "GET /admin/api-keys",
+      "path": "$.count"
+    },
+    {
+      "endpoint": "POST /admin/api-keys/*/revoke",
+      "path": "$.api_key.revoked_at"
+    },
+    {
+      "endpoint": "GET /admin/api-keys/*",
+      "path": "$.api_key.revoked_at"
+    },
+    {
+      "endpoint": "POST /admin/campaigns",
+      "path": "$.campaign.budget.campaign_id"
+    },
+    {
+      "endpoint": "POST /admin/campaigns",
+      "path": "$.campaign.campaign_identifier"
+    },
+    {
+      "endpoint": "POST /admin/campaigns",
+      "path": "$.campaign.description"
+    },
+    {
+      "endpoint": "POST /admin/campaigns",
+      "path": "$.campaign.name"
+    },
+    {
+      "endpoint": "GET /admin/campaigns/*",
+      "path": "$.campaign.campaign_identifier"
+    },
+    {
+      "endpoint": "GET /admin/campaigns/*",
+      "path": "$.campaign.description"
+    },
+    {
+      "endpoint": "GET /admin/campaigns/*",
+      "path": "$.campaign.name"
+    },
+    {
+      "endpoint": "POST /admin/campaigns/*",
+      "path": "$.campaign.campaign_identifier"
+    },
+    {
+      "endpoint": "POST /admin/campaigns/*",
+      "path": "$.campaign.description"
+    },
+    {
+      "endpoint": "POST /admin/campaigns/*",
+      "path": "$.campaign.name"
+    },
+    {
+      "endpoint": "GET /admin/campaigns",
+      "path": "$.campaigns[*].name"
+    },
+    {
+      "endpoint": "POST /admin/customer-groups",
+      "path": "$.customer_group.name"
+    },
+    {
+      "endpoint": "GET /admin/customer-groups",
+      "path": "$.customer_groups[*].name"
+    },
+    {
+      "endpoint": "GET /admin/customer-groups/*",
+      "path": "$.customer_group.name"
+    },
+    {
+      "endpoint": "POST /admin/customer-groups/*",
+      "path": "$.customer_group.name"
+    },
+    {
+      "endpoint": "POST /admin/customers",
+      "path": "$.customer.email"
+    },
+    {
+      "endpoint": "POST /admin/customers",
+      "path": "$.customer.first_name"
+    },
+    {
+      "endpoint": "POST /admin/customers",
+      "path": "$.customer.last_name"
+    },
+    {
+      "endpoint": "GET /admin/customers/*",
+      "path": "$.customer.email"
+    },
+    {
+      "endpoint": "GET /admin/customers/*",
+      "path": "$.customer.first_name"
+    },
+    {
+      "endpoint": "GET /admin/customers/*",
+      "path": "$.customer.last_name"
+    },
+    {
+      "endpoint": "GET /admin/customers",
+      "path": "$.customers[*].email"
+    },
+    {
+      "endpoint": "GET /admin/customers",
+      "path": "$.customers[*].first_name"
+    },
+    {
+      "endpoint": "GET /admin/customers",
+      "path": "$.customers[*].last_name"
+    },
+    {
+      "endpoint": "POST /admin/customers/*",
+      "path": "$.customer.company_name"
+    },
+    {
+      "endpoint": "POST /admin/customers/*",
+      "path": "$.customer.email"
+    },
+    {
+      "endpoint": "POST /admin/customers/*",
+      "path": "$.customer.first_name"
+    },
+    {
+      "endpoint": "POST /admin/customers/*",
+      "path": "$.customer.last_name"
+    },
+    {
+      "endpoint": "GET /admin/customers/*",
+      "path": "$.customer.company_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.billing_address.first_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.billing_address.last_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.display_id"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.email"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.shipping_address.last_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.shipping_address.first_name"
+    },
+    {
+      "endpoint": "GET /admin/draft-orders",
+      "path": "$.draft_orders[*].customer.email"
+    },
+    {
+      "endpoint": "GET /admin/draft-orders",
+      "path": "$.draft_orders[*].customer_id"
+    },
+    {
+      "endpoint": "GET /admin/draft-orders",
+      "path": "$.draft_orders[*].display_id"
+    },
+    {
+      "endpoint": "GET /admin/draft-orders",
+      "path": "$.draft_orders[*].email"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.display_id"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.billing_address.first_name"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.shipping_address.first_name"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.shipping_address.last_name"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.billing_address.last_name"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.customer.email"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.customer_id"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.email"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.billing_address.address_1"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.shipping_address.address_1"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.shipping_address.postal_code"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.billing_address.address_1"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.shipping_address.postal_code"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.shipping_address.address_1"
+    },
+    {
+      "endpoint": "GET /admin/orders/*",
+      "path": "$.order.billing_address.postal_code"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.billing_address.address_1"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.billing_address.first_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.billing_address.last_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.billing_address.postal_code"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.display_id"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.shipping_address.postal_code"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.shipping_address.last_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.shipping_address.first_name"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.shipping_address.address_1"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders/*/convert-to-order",
+      "path": "$.order.email"
+    },
+    {
+      "endpoint": "POST /admin/orders/export",
+      "path": "$.transaction_id"
+    },
+    {
+      "endpoint": "GET /admin/stock-locations",
+      "path": "$.stock_locations[*].name"
+    },
+    {
+      "endpoint": "GET /admin/stock-locations",
+      "path": "$.stock_locations[*].address.address_1"
+    },
+    {
+      "endpoint": "GET /admin/stock-locations",
+      "path": "$.stock_locations[*].address.postal_code"
+    },
+    {
+      "endpoint": "POST /admin/draft-orders",
+      "path": "$.draft_order.billing_address.postal_code"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items",
+      "path": "$.inventory_item.sku"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*/location-levels/batch",
+      "path": "$.created[*].raw_stocked_quantity.value"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*/location-levels/batch",
+      "path": "$.created[*].stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].location_levels[*].available_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].location_levels[*].inventory_item_id"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].location_levels[*].raw_stocked_quantity.value"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].location_levels[*].stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].sku"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].available_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].raw_stocked_quantity.value"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.sku"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*/location-levels",
+      "path": "$.inventory_levels[*].available_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*/location-levels",
+      "path": "$.inventory_levels[*].stocked_quantity"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.height"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].available_quantity"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].raw_stocked_quantity.value"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.stocked_quantity"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.sku"
+    },
+    {
+      "endpoint": "POST /admin/inventory-items/*",
+      "path": "$.inventory_item.location_levels[*].stocked_quantity"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items",
+      "path": "$.inventory_items[*].height"
+    },
+    {
+      "endpoint": "GET /admin/inventory-items/*",
+      "path": "$.inventory_item.height"
+    }
+  ]
+}

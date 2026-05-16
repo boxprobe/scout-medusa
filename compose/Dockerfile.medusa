@@ -1,0 +1,56 @@
+# Medusa v2 backend + admin dashboard, built from a pinned commit of
+# medusajs/dtc-starter. Self-contained — no host-side checkout required.
+
+FROM node:20-alpine
+
+RUN apk add --no-cache curl python3 make g++
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+WORKDIR /app
+
+# Download dtc-starter source at the specified commit hash.
+# Uses GitHub's codeload archive API (works for any commit, not just branch tips).
+ARG REPO_ARCHIVE=https://codeload.github.com/medusajs/dtc-starter/tar.gz
+ARG COMMIT
+LABEL org.opencontainers.image.revision="$COMMIT"
+RUN curl -sfL "$REPO_ARCHIVE/$COMMIT" | tar xz --strip-components=1 -C /app
+
+# Install dependencies (approve build scripts for native packages).
+RUN pnpm install --frozen-lockfile || pnpm install
+RUN cd apps/backend && pnpm approve-builds sharp esbuild @swc/core 2>/dev/null; pnpm install || true
+
+# Patch medusa-config to use the env vars our compose injects.
+RUN cat > /app/apps/backend/medusa-config.ts <<'EOF'
+import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+
+loadEnv(process.env.NODE_ENV || 'development', process.cwd())
+
+module.exports = defineConfig({
+  projectConfig: {
+    databaseUrl: process.env.DATABASE_URL,
+    databaseDriverOptions: { ssl: false },
+    redisUrl: process.env.REDIS_URL,
+    cookieOptions: { secure: false, sameSite: "lax" },
+    http: {
+      storeCors: process.env.STORE_CORS!,
+      adminCors: process.env.ADMIN_CORS!,
+      authCors: process.env.AUTH_CORS!,
+      jwtSecret: process.env.JWT_SECRET || "changeme-jwt-secret",
+      cookieSecret: process.env.COOKIE_SECRET || "changeme-cookie-secret",
+    }
+  }
+})
+EOF
+
+# Build admin dashboard at image build time.
+# `medusa build` outputs to .medusa/server/public/admin but the start command
+# expects public/admin, so we mirror it.
+RUN cd apps/backend && pnpm medusa build \
+    && mkdir -p public && cp -r .medusa/server/public/admin public/admin
+
+EXPOSE 9000
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]
